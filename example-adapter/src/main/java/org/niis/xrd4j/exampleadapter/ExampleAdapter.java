@@ -42,6 +42,8 @@ import javax.xml.soap.SOAPMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.hg.statistika.FieData;
+
 /**
  * This class implements two simple X-Road v6 compatible services: "getRandom"
  * and "helloService". Service descriptions are defined in "example.wsdl" file
@@ -127,7 +129,7 @@ public class ExampleAdapter extends AbstractAdapterServlet {
             if (request.getRequestData() != null) {
                 // If request data is not null, add response data to the
                 // response object
-                response.setResponseData("Hello " + request.getRequestData() + "! Greetings from adapter server!");
+                response.setResponseData("Data from request: " + request.getRequestData() + "FIE data: " + FieData.data());
             } else {
                 // No request data is found - an error message is returned
                 logger.warn("No \"name\" parameter found. Return a non-techinal error message.");
