@@ -27,13 +27,32 @@ import javax.xml.bind.JAXBException;
 import com.hg.helper.XMLHelper;
 
 import eu.x_road.emta_v6.ObjectFactory;
+import eu.x_road.emta_v6.PersonalIdentityCode;
 import eu.x_road.emta_v6.SelfEmployedPerson;
+import eu.x_road.emta_v6.XteeFieAndmed;
 import eu.x_road.emta_v6.XteeFieAndmedResponse;
 import eu.x_road.emta_v6.XteeFieAndmedResponseType;
 import eu.x_road.emta_v6.XteeFieAndmedResponseType.FieJada;
 
 public class FieData {
-	public static String data() {
+	public static String requestXml() {
+		ObjectFactory oFactory =new ObjectFactory();
+		//XteeFieAndmedResponse oXteeFieAndmedResponse = oFactory.createXteeFieAndmedResponse();
+		XteeFieAndmed oXteeFieAndmed = oFactory.createXteeFieAndmed();
+		PersonalIdentityCode oPersonalIdentityCode=oFactory.createPersonalIdentityCode();
+		oPersonalIdentityCode.setIsikukood("38409209420223");
+		oXteeFieAndmed.setKeha(oPersonalIdentityCode);
+		
+		try {
+			return XMLHelper.createXMLRequest(oXteeFieAndmed).toString();
+			
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "Viga";
+		}	
+	}
+	public static String getData(PersonalIdentityCode oPersonalIdentityCode) {
 		
 		ObjectFactory oFactory =new ObjectFactory();
 		XteeFieAndmedResponse oResponse=oFactory.createXteeFieAndmedResponse();
@@ -54,8 +73,8 @@ public class FieData {
 		}
 		
 		oResponseType.setFieJada(oFieJada);
-		
 		oResponse.setKeha(oResponseType);
+		oResponse.setParing(oPersonalIdentityCode);
 		
 		try {
 			return XMLHelper.createXML(oResponse).toString();

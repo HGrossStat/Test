@@ -114,9 +114,7 @@ For implementation details and tips for creating an X-Road service adapter using
 
 Testing HTTPS connectivity may require setting up SSL on Tomcat. Basic instructions for this can be found [here](documentation/Setting-up-SSL-on-Tomcat.md).  
 
-### Compatibility Mode With Older X-Road Versions
 
-To enable processing of SOAP Body elements in compatibility mode with older versions of X-Road protocol, method `request.setProcessingWrappers(true)` must be called before serialization or deserialization of messages. This means that request messages must contain `request` wrapper and response messages must contain `request` and `response` wrappers. To skip automatic procession of `request` and `response` wrappers, method `request.setProcessingWrappers(false)` must be called before serialization or deserialization of messages, which is the default. The usage of `setProcessingWrappers` method is demonstrated in the [the adapter implementation examples](documentation/adapter-implementation.md).
 
 ## Credits
 

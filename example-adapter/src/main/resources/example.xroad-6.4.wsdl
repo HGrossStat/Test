@@ -55,6 +55,92 @@
             </xsd:element>
         </xsd:schema>
     </wsdl:types>
+	  <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://emta-v6.x-road.eu">
+            <import namespace="http://x-road.eu/xsd/xroad.xsd" schemaLocation="http://x-road.eu/xsd/xroad.xsd"/>
+            <element name="xteeFieAndmed">
+                <complexType>
+                    <sequence>
+                        <element name="keha" type="tns:PersonalIdentityCode"/>
+                    </sequence>
+                </complexType>
+            </element>
+            <complexType name="PersonalIdentityCode">
+                <sequence>
+                    <element name="isikukood" type="string">
+                        <annotation>
+                            <appinfo>
+                                <xrd:title xml:lang="et">Isikukood</xrd:title>
+                            </appinfo>
+                        </annotation>
+                    </element>
+                </sequence>
+            </complexType>
+            <element name="xteeFieAndmedResponse">
+                <complexType>
+                    <sequence>
+                        <element name="paring" type="tns:PersonalIdentityCode"/>
+                        <element name="keha" type="tns:XteeFieAndmedResponseType"/>
+                    </sequence>
+                </complexType>
+            </element>
+            <complexType name="XteeFieAndmedResponseType">
+                <sequence>
+                    <element minOccurs="0" name="kokku" type="string">
+                        <annotation>
+                            <appinfo>
+                                <xrd:title xml:lang="et">Tulemus</xrd:title>
+                            </appinfo>
+                        </annotation>
+                    </element>
+                    <element minOccurs="0" name="lisainfo" type="string">
+                        <annotation>
+                            <appinfo>
+                                <xrd:title xml:lang="et">Lisainfo</xrd:title>
+                            </appinfo>
+                        </annotation>
+                    </element>
+                    <element minOccurs="0" name="fieJada">
+                        <annotation>
+                            <appinfo>
+                                <xrd:title xml:lang="et">Perioodid</xrd:title>
+                            </appinfo>
+                        </annotation>
+                        <complexType>
+                            <sequence>
+                                <element maxOccurs="unbounded" minOccurs="0" name="item" type="tns:SelfEmployedPerson"/>
+                            </sequence>
+                        </complexType>
+                    </element>
+                </sequence>
+            </complexType>
+            <complexType name="SelfEmployedPerson">
+                <sequence>
+                    <element name="isikukood" type="string">
+                        <annotation>
+                            <appinfo>
+                                <xrd:title xml:lang="et">Isikukood</xrd:title>
+                            </appinfo>
+                        </annotation>
+                    </element>
+                    <element name="algus" type="string">
+                        <annotation>
+                            <appinfo>
+                                <xrd:title xml:lang="et">Algus (pp.kk.aaaa)</xrd:title>
+                            </appinfo>
+                        </annotation>
+                    </element>
+                    <element minOccurs="0" name="lopp" type="string">
+                        <annotation>
+                            <appinfo>
+                                <xrd:title xml:lang="et">Lõpp (pp.kk.aaaa)</xrd:title>
+                            </appinfo>
+                        </annotation>
+                    </element>
+                </sequence>
+            </complexType>
+        </schema>
+    </wsdl:types>
 
     <wsdl:message name="requestheader">
         <wsdl:part name="client" element="xrd:client" />
@@ -77,7 +163,21 @@
     <wsdl:message name="helloServiceResponse">
         <wsdl:part name="body" element="tns:helloServiceResponse"/>
     </wsdl:message>
-
+	<wsdl:message name="xteeFieAndmed">
+        <wsdl:part element="tns:xteeFieAndmed" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="xteeFieAndmedResponse">
+        <wsdl:part element="tns:xteeFieAndmedResponse" name="parameters"/>
+    </wsdl:message>
+	
+    <wsdl:message name="xrdHeader">
+        <wsdl:part element="xrd:client" name="client"/>
+        <wsdl:part element="xrd:service" name="service"/>
+        <wsdl:part element="xrd:id" name="id"/>
+        <wsdl:part element="xrd:userId" name="userId"/>
+        <wsdl:part element="xrd:issue" name="issue"/>
+        <wsdl:part element="xrd:protocolVersion" name="protocolVersion"/>
+    </wsdl:message>
     <wsdl:portType name="testServicePortType">
         <wsdl:operation name="getRandom">
             <wsdl:input message="tns:getRandom"/>
@@ -88,7 +188,15 @@
             <wsdl:output message="tns:helloServiceResponse"/>
         </wsdl:operation>
     </wsdl:portType>
-
+	   <wsdl:portType name="webServiceInterface">
+        <wsdl:operation name="xteeFieAndmed">
+            <wsdl:documentation>
+                <xrd:title xml:lang="et">FIE andmed</xrd:title>
+            </wsdl:documentation>
+            <wsdl:input message="tns:xteeFieAndmed"/>
+            <wsdl:output message="tns:xteeFieAndmedResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
     <wsdl:binding name="testServiceBinding" type="tns:testServicePortType">
         <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
         <wsdl:operation name="getRandom">
@@ -113,7 +221,31 @@
                 <soap:header message="tns:requestheader" part="protocolVersion" use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-
+		<wsdl:binding name="soapBindings" type="tns:webServiceInterface">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="xteeFieAndmed">
+            <soap:operation soapAction=""/>
+            <xrd:version>v1</xrd:version>
+            <wsdl:input>
+                <soap:header message="tns:xrdHeader" part="client" use="literal"/>
+                <soap:header message="tns:xrdHeader" part="service" use="literal"/>
+                <soap:header message="tns:xrdHeader" part="id" use="literal"/>
+                <soap:header message="tns:xrdHeader" part="protocolVersion" use="literal"/>
+                <soap:header message="tns:xrdHeader" part="userId" use="literal"/>
+                <soap:header message="tns:xrdHeader" part="issue" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:header message="tns:xrdHeader" part="client" use="literal"/>
+                <soap:header message="tns:xrdHeader" part="service" use="literal"/>
+                <soap:header message="tns:xrdHeader" part="id" use="literal"/>
+                <soap:header message="tns:xrdHeader" part="protocolVersion" use="literal"/>
+                <soap:header message="tns:xrdHeader" part="userId" use="literal"/>
+                <soap:header message="tns:xrdHeader" part="issue" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
         <wsdl:operation name="helloService">
             <soap:operation soapAction="" style="document" />
             <xrd:version>v1</xrd:version>
@@ -139,6 +271,11 @@
     </wsdl:binding>
     <wsdl:service name="testService">
         <wsdl:port binding="tns:testServiceBinding" name="testServicePort">
+            <soap:address location="http://localhost:8080/${project.build.finalName}/Endpoint"/>
+        </wsdl:port>
+    </wsdl:service>
+	<wsdl:service name="webService">
+        <wsdl:port binding="tns:soapBindings" name="port">
             <soap:address location="http://localhost:8080/${project.build.finalName}/Endpoint"/>
         </wsdl:port>
     </wsdl:service>

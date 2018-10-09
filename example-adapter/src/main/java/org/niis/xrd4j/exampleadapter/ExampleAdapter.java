@@ -42,7 +42,10 @@ import javax.xml.soap.SOAPMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.hg.helper.XMLHelper;
 import com.hg.statistika.FieData;
+
+import eu.x_road.emta_v6.XteeFieAndmed;
 
 /**
  * This class implements two simple X-Road v6 compatible services: "getRandom"
@@ -129,7 +132,51 @@ public class ExampleAdapter extends AbstractAdapterServlet {
             if (request.getRequestData() != null) {
                 // If request data is not null, add response data to the
                 // response object
-                response.setResponseData("Data from request: " + request.getRequestData() + "FIE data: " + FieData.data());
+            	
+            	//Parse input data .xml to java object
+            	XteeFieAndmed oXteeFieAndmed = XMLHelper.parseRequestXml(request.getRequestData());
+            	
+                response.setResponseData("Data from request: " + request.getRequestData() + "FIE data: " + FieData.getData(oXteeFieAndmed.getKeha()));
+            } else {
+                // No request data is found - an error message is returned
+                logger.warn("No \"name\" parameter found. Return a non-techinal error message.");
+                ErrorMessage error = new ErrorMessage("422", "422 Unprocessable Entity. Missing \"name\" element.");
+                response.setErrorMessage(error);
+            }
+            logger.debug("Message prosessing done!");
+            // Serialize the response to SOAP
+            serializer.serialize(response, request);
+            // Return the response - AbstractAdapterServlet takes care of
+            // the rest
+            return response;
+        }else if ("xteeFieAndmed".equals(request.getProducer().getServiceCode())) {
+            // Process "helloService" service
+            logger.info("Process \"xteeFieAndmed\" service.");
+            // Create a new response serializer that serializes the response
+            // to SOAP
+            serializer = new HelloServiceResponseSerializer();
+            // Create a custom request deserializer that parses the request
+            // data from the SOAP request
+            CustomRequestDeserializer customDeserializer = new CustomRequestDeserializerImpl();
+            // Parse the request data from the request
+            customDeserializer.deserialize(request, this.namespaceDeserialize);
+            // Create a new ServiceResponse object
+            response = new ServiceResponse<>(request.getConsumer(), request.getProducer(), request.getId());
+            // Set namespace of the SOAP response
+            response.getProducer().setNamespaceUrl(this.namespaceSerialize);
+            response.getProducer().setNamespacePrefix(this.prefix);
+            logger.debug("Do message prosessing...");
+            if (request.getRequestData() != null) {
+                // If request data is not null, add response data to the
+                // response object
+               
+            	// response.setResponseData("Data from request: " + request.getRequestData() + "FIE data: " + FieData.requestXml());
+            	//Parse input data .xml to java object
+            	XteeFieAndmed oXteeFieAndmed = XMLHelper.parseRequestXml(request.getRequestData());
+            	
+                response.setResponseData("Request XML: " + request.getRequestData() + "FIE request response data XML: " + FieData.getData(oXteeFieAndmed.getKeha()));
+            	
+            
             } else {
                 // No request data is found - an error message is returned
                 logger.warn("No \"name\" parameter found. Return a non-techinal error message.");

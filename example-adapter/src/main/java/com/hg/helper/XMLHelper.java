@@ -22,31 +22,68 @@
  */
 package com.hg.helper;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.StringReader;
 import java.io.StringWriter;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
+import eu.x_road.emta_v6.ObjectFactory;
+import eu.x_road.emta_v6.XteeFieAndmed;
 import eu.x_road.emta_v6.XteeFieAndmedResponse;
 
 public class XMLHelper {
-public static StringWriter createXML(XteeFieAndmedResponse oResponse) throws JAXBException{
-		
-		//Create XML
-		JAXBContext context = JAXBContext.newInstance(XteeFieAndmedResponse.class);
-		
-		Marshaller marshaller = context.createMarshaller();
-		//marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,Boolean.TRUE);
 
-		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,Boolean.TRUE);
-		
+	public static StringWriter createXML(XteeFieAndmedResponse oResponse) throws JAXBException {
+		// Create XML
+		JAXBContext context = JAXBContext.newInstance(XteeFieAndmedResponse.class);
+
+		Marshaller marshaller = context.createMarshaller();
+		// marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,Boolean.TRUE);
+
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
 		java.io.StringWriter sw = new StringWriter();
 
 		marshaller.marshal(oResponse, sw);
-		
+
 		return sw;
 	}
+
+	public static StringWriter createXMLRequest(XteeFieAndmed oXteeFieAndmed) throws JAXBException {
+		// Create XML
+		JAXBContext context = JAXBContext.newInstance(XteeFieAndmed.class);
+
+		Marshaller marshaller = context.createMarshaller();
+		// marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,Boolean.TRUE);
+
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+		java.io.StringWriter sw = new StringWriter();
+
+		marshaller.marshal(oXteeFieAndmed, sw);
+
+		return sw;
+	}
+
+	public static XteeFieAndmed parseRequestXml(Object requestData) {
+		XteeFieAndmed oXteeFieAndmed=new ObjectFactory().createXteeFieAndmed();
+		
+		JAXBContext jaxbContext;
+		try {
+			StringReader reader = new StringReader((String) requestData);
+			jaxbContext = JAXBContext.newInstance(XteeFieAndmed.class);
+			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+			//TODO: kontrolli kas unmarshal töötab
+			oXteeFieAndmed=(XteeFieAndmed) jaxbUnmarshaller.unmarshal(reader);
+		} catch (JAXBException e) {
+			
+			e.printStackTrace();
+		}
+		return oXteeFieAndmed;
+    	
+	}
+
 }
