@@ -82,6 +82,7 @@ public class XMLHelper {
 			
 			e.printStackTrace();
 		}
+		
 		return oXteeFieAndmed;
     	
 	}
