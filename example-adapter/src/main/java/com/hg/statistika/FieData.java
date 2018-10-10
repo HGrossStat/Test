@@ -66,7 +66,7 @@ public class FieData {
 			//TODO: optimeeri
 			SelfEmployedPerson oSelfEmployedPerson=new SelfEmployedPerson();
 			oSelfEmployedPerson.setAlgus(String.valueOf(i));
-			oSelfEmployedPerson.setIsikukood("83733039828");
+			oSelfEmployedPerson.setIsikukood("686383838383");
 			oSelfEmployedPerson.setLopp(String.valueOf(i));
 			
 			oFieJada.getItem().add(oSelfEmployedPerson);

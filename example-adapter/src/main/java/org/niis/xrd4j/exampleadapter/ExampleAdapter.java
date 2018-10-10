@@ -171,10 +171,12 @@ public class ExampleAdapter extends AbstractAdapterServlet {
                 // response object
                
             	// response.setResponseData("Data from request: " + request.getRequestData() + "FIE data: " + FieData.requestXml());
+            	
             	//Parse input data .xml to java object
             	XteeFieAndmed oXteeFieAndmed = XMLHelper.parseRequestXml(request.getRequestData());
             	
-                response.setResponseData("Request XML: " + request.getRequestData() + "FIE request response data XML: " + FieData.getData(oXteeFieAndmed.getKeha()));
+                //response.setResponseData("Request XML: " + request.getRequestData() + "FIE request response data XML: " + FieData.getData(oXteeFieAndmed.getKeha()));
+                response.setResponseData(FieData.getData(oXteeFieAndmed.getKeha()));
             	
             
             } else {

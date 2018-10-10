@@ -31,6 +31,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import eu.x_road.emta_v6.ObjectFactory;
+import eu.x_road.emta_v6.PersonalIdentityCode;
 import eu.x_road.emta_v6.XteeFieAndmed;
 import eu.x_road.emta_v6.XteeFieAndmedResponse;
 
@@ -71,7 +72,12 @@ public class XMLHelper {
 	public static XteeFieAndmed parseRequestXml(Object requestData) {
 		XteeFieAndmed oXteeFieAndmed=new ObjectFactory().createXteeFieAndmed();
 		
+		//oXteeFieAndmed.setKeha(value);
+		
 		JAXBContext jaxbContext;
+		
+		//StringReader reader = new StringReader("&lt;xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?&gt;&lt;ns2:xteeFieAndmed xmlns:ns2=\"http://emta-v6.x-road.eu\"&gt;&lt;keha&gt;&lt;isikukood&gt;38409209420223&lt;/isikukood&gt;&lt;/keha&gt;&lt;/ns2:xteeFieAndmed&gt;");
+		
 		try {
 			StringReader reader = new StringReader((String) requestData);
 			jaxbContext = JAXBContext.newInstance(XteeFieAndmed.class);
@@ -79,7 +85,9 @@ public class XMLHelper {
 			//TODO: kontrolli kas unmarshal töötab
 			oXteeFieAndmed=(XteeFieAndmed) jaxbUnmarshaller.unmarshal(reader);
 		} catch (JAXBException e) {
-			
+			PersonalIdentityCode oPersonalIdentityCode=new ObjectFactory().createPersonalIdentityCode();
+			oPersonalIdentityCode.setIsikukood("12345667899");
+			oXteeFieAndmed.setKeha(oPersonalIdentityCode);
 			e.printStackTrace();
 		}
 		
