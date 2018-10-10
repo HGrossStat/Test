@@ -1,3 +1,13 @@
+#### Test
+
+Käivitades example-adapter projekti ja seejärel :
+
+Käivitades järgneva curl käsu, saame veebirakenduselt vastuse
+
+```
+curl -d @examples/xroad-6.4/getFieRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter-0.0.5-SNAPSHOT/Endpoint
+```
+
 # XRd4J
 
 XRd4J is a Java library for building X-Road v6 Adapter servers and clients. The library implements X-Road v6 [SOAP profile](https://github.com/nordic-institute/X-Road/blob/master/doc/Protocols/pr-mess_x-road_message_protocol.md) v4.0 and [Service Metadata Protocol](https://github.com/nordic-institute/X-Road/blob/master/doc/Protocols/pr-meta_x-road_service_metadata_protocol.md). The library takes care of serialization and deserialization of SOAP messages offering built-in support for standard X-Road SOAP headers; only processing of application specific request and response content remains to be implemented.
