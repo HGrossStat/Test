@@ -1,3 +1,14 @@
+#### Test
+
+Käivitades järgneva curl käsu, saame veebirakenduselt vastuse
+
+
+```
+curl -d @examples/xroad-6.4/getFieRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter-0.0.5-SNAPSHOT/Endpoint
+```
+
+
+
 # X-Road Adapter Example
 
 This project provides an example implementation of a web service that is compatible with the X-Road v6 adapter server protocol version [4.0](https://github.com/nordic-institute/X-Road/blob/develop/doc/Protocols/pr-mess_x-road_message_protocol.md). The implementation is based on the [XRd4J](https://github.com/nordic-institute/xrd4j) library. The example adapter contains a single class that
